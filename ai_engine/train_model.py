@@ -1,15 +1,26 @@
+import sys
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report
 import joblib
+from config import feature_names
 
 # Load Data
-df = pd.read_csv("shill_bidding.csv")
+try:
+    df = pd.read_csv("shill_bidding.csv")
+except FileNotFoundError:
+    print("Error: shill_bidding.csv not found. Please ensure the dataset is in the current directory.")
+    sys.exit(1)
+    
+# Validate columns exist
+missing_features = set(feature_names + ["Class"]) - set(df.columns)
+if missing_features:
+    print(f"Error: Missing columns in dataset: {missing_features}")
+    sys.exit(1)
 
 # Select Features (X) and Target (y)
-features = ["Bidder_Tendency", "Bidding_Ratio", "Successive_Outbidding", "Last_Bidding", "Auction_Bids", "Starting_Price_Average", "Early_Bidding", "Winning_Ratio", "Auction_Duration"]
-X = df[features]
+X = df[feature_names]
 y = df["Class"]
 
 # Split Data

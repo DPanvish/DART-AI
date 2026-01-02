@@ -1,6 +1,7 @@
 import sys
 import joblib
 import pandas as pd
+from config import feature_names
 import warnings
 
 # Suppress warnings for cleaner output
@@ -14,9 +15,6 @@ except:
     model = joblib.load("ai_engine/fraud_model.pkl")
 
 def predict(data_values):
-    feature_names = ['Bidder_Tendency', 'Bidding_Ratio', 'Successive_Outbidding',
-                     'Last_Bidding', 'Auction_Bids', 'Starting_Price_Average',
-                     'Early_Bidding', 'Winning_Ratio', 'Auction_Duration']
 
     # Create a DataFrame for a single row
     input_df = pd.DataFrame([data_values], columns=feature_names)
