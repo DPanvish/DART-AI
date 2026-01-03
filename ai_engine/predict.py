@@ -1,4 +1,5 @@
 import sys
+import os
 import joblib
 import pandas as pd
 from config import feature_names
@@ -7,12 +8,16 @@ import warnings
 # Suppress warnings for cleaner output
 warnings.filterwarnings("ignore")
 
+current_script_folder = os.path.dirname(os.path.abspath(__file__))
+model_path = os.path.join(current_script_folder, 'fraud_model.pkl')
+
 # Load Model
 try:
-    model = joblib.load("fraud_model.pkl")
-except:
-    # Fallback if running from the root directory
-    model = joblib.load("ai_engine/fraud_model.pkl")
+    model = joblib.load(model_path)
+except FileNotFoundError:
+    print(f"Error: Model not found at {model_path}")
+    print("Make sure you ran train_model.py inside the ai_engine folder first!")
+    sys.exit(1)
 
 def predict(data_values):
 
